@@ -57,6 +57,10 @@ class AVCParser
       next if line=~/apparmor/
       next if line=~/type=PROCTITLE/
       next if line=~/type=SYSCALL/
+      next if line=~/type=CWD/
+      next if line=~/type=PATH/
+      next if line=~/type=USER_AVC.*op=load_policy/
+      next if line=~/type=USER_AVC.*op=setenforce/
       if line=~/ ( denied  { (.*) } for  ?(.*) scontext=(\S+) tcontext=(\S+) tclass=(\S+) permissive=(\d))/
         full_avc = $1
         permissions = $2
