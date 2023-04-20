@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'open3'
-require 'optparse'
 begin
   require 'colorize'
 rescue LoadError
@@ -14,11 +13,14 @@ rescue LoadError
 end
 
 class AVCParser
+  attr_accessor :stdin
+
   TO_PERMISSIONS = [ 'transition' ]
 
   def initialize( opts = {} )
-    @opts = opts
-    @ausearch_opts = @opts[:ausearch_opts]
+    @stdin = false
+
+    @ausearch_opts = opts
     @ausearch_opts.unshift('-i')
     @ausearch_opts.unshift('AVC,USER_AVC,SELINUX_ERR,USER_SELINUX_ERR')
     @ausearch_opts.unshift('-m')
@@ -44,7 +46,7 @@ class AVCParser
 
   def run
     avc_cache = {}
-    if @opts[:stdin] 
+    if @stdin 
       lines = get_avcs_stdin
       puts
     else
@@ -88,16 +90,12 @@ class AVCParser
   end
 end
 
-options = {}
-OptionParser.new do |opts|
-  opts.banner = "Usage: analyzer [options]"
+# can't use optparse as it doesn't allow for unkown uptions
+stdin=false
+if ARGV.reject! { |elem| elem=='--stdin' }
+  stdin=true
+end
 
-  opts.on("--stdin", "get AVCs from STDIN") do
-    options[:stdin] = true
-  end
-end.parse!
-
-options[:ausearch_opts] = ARGV
-
-a = AVCParser.new( options )
+a = AVCParser.new( ARGV )
+a.stdin=stdin
 a.run
