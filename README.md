@@ -1,6 +1,8 @@
 # avcs
 Small wrapper around ausearch to make SELinux AVCs easier to read
 
+![Screenshot of the output the tool generates](screenshot.jpg)
+
 # Usage
 All command line flags are passed to ausearch, apart from --stdin.
 With this flag you can paste AVCs in the tool instead of getting them via ausearch.
