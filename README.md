@@ -20,6 +20,9 @@ will read AVCs from STDIN until EOF and use those
 
 ## Run as container
 If your system doesn't have ruby you can build a container with the provided Dockerfile. E.g.
+
 `podman build . -t avc`
+
 then run it
+
 `podman run --privileged -v /var/log/audit/:/var/log/audit avc -ts recent`
